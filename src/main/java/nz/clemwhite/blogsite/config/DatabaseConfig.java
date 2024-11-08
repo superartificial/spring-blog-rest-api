@@ -9,25 +9,29 @@ import javax.sql.DataSource;
 @Configuration
 public class DatabaseConfig {
 
-    @Value("${DATABASE_URL:}")
-    private String databaseUrl;
+    @Value("${PGHOST:localhost}")
+    private String host;
+
+    @Value("${PGPORT:5432}")
+    private String port;
+
+    @Value("${PGDATABASE:blogdb}")
+    private String database;
+
+    @Value("${PGUSER:postgres}")
+    private String username;
+
+    @Value("${PGPASSWORD:postgres}")
+    private String password;
 
     @Bean
     public DataSource dataSource() {
-        if (databaseUrl != null && !databaseUrl.isEmpty()) {
-            // Convert Railway's DATABASE_URL to JDBC format
-            String jdbcUrl = databaseUrl.replace("postgres://", "jdbc:postgresql://");
+        String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s", host, port, database);
 
-            return DataSourceBuilder.create()
-                    .url(jdbcUrl)
-                    .build();
-        }
-
-        // Fallback for local development
         return DataSourceBuilder.create()
-                .url("jdbc:postgresql://localhost:5432/blogdb")
-                .username("postgres")
-                .password("postgres")
+                .url(jdbcUrl)
+                .username(username)
+                .password(password)
                 .build();
     }
 }
