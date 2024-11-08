@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 public class DatabaseConfig {
 
     @Value("${PGHOST:localhost}")
@@ -26,6 +26,7 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource dataSource() {
+        System.out.println("CONGIG");
         String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s", host, port, database);
 
         return DataSourceBuilder.create()
